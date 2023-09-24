@@ -4,6 +4,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def main():
     return '''
@@ -12,6 +13,7 @@ def main():
          <input type="submit" value="Submit!">
      </form>
      '''
+
 
 @app.route("/echo_user_input", methods=["POST"])
 def echo_input():
