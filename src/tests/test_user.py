@@ -1,7 +1,13 @@
 from models.user import User
+import unittest
 
 
-def test_normal_user():
-    normal_user = User('danielbrito', 'password')
-    assert normal_user.username == 'danielbrito'
-    assert normal_user.password == 'password'
+class TestUser(unittest.TestCase):
+    def test_normal_user(self):
+        normal_user = User('danielbrito', 'password')
+        self.assertEqual(normal_user.username, 'danielbrito')
+        self.assertEqual(normal_user.password, 'password')
+
+
+if __name__ == '__main__':
+    unittest.main()
