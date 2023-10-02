@@ -56,10 +56,20 @@ class RegisterForm(FlaskForm):
                                   " and uppercase letter")
 
 
+if os.environ.get('DATABASE_URL') is not None:
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') 
+else:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///Users.sqlite3'
+
+if os.environ.get('SECRET_KEY') is not None:
+    SECRET_KEY = os.environ.get('SECRET_KEY') 
+else:
+    SECRET_KEY = 'ldfjsolasfuasdfjsodfusoij4w09r8pswojufsldkfjdf9'
+
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Users.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.app_context().push()
 
