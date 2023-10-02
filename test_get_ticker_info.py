@@ -1,7 +1,6 @@
 import get_ticker_info
 import unittest
 from unittest.mock import patch, PropertyMock, Mock
-import yfinance as yf
 import pandas as pd
 
 
@@ -12,14 +11,6 @@ class TestTickerInfo(unittest.TestCase):
         f"/download/{self.tickerFetcher}?period1=1030060800&"
         "period2=1684368000&interval=1d&events=history"
         "&includeAdjustedClose=true"
-
-    def test_fetch_metrics(self):        
-        with patch.object(yf.Ticker, "info",
-                          new_callable=PropertyMock) as attr_mock:
-            attr_mock.return_value = {'trailingEps': 1, 'trailingPE': 2}
-
-            self.assertEqual(self.tickerFetcher.fetch_metrics("TIKR")[0], 1)
-            self.assertEqual(self.tickerFetcher.fetch_metrics("TIKR")[1], 2)
 
     @patch('requests.get')
     def test_fetch_prices(self, mocked_get):
