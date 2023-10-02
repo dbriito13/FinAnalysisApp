@@ -1,5 +1,5 @@
 from app import app, db, bcrypt
-from models.user import User
+from user import User
 import unittest
 
 

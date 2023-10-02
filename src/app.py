@@ -3,14 +3,14 @@
 import sys
 
 from flask import request, Flask, flash, session, render_template, redirect
-from routes.get_ticker_info import TickerFetcher
-from routes.ticker_graphs import TickerGraphs
+from get_ticker_info import TickerFetcher
+from ticker_graphs import TickerGraphs
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
-from forms.login import LoginForm
-from forms.register import RegisterForm
+from login import LoginForm
+from register import RegisterForm
 from flask_bcrypt import Bcrypt
 from database import db
-from models.user import User
+from user import User
 import os 
 from healthcheck import HealthCheck
 
