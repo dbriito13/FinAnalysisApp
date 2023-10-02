@@ -1,5 +1,4 @@
 import app
-import user_model
 import unittest
 
 
