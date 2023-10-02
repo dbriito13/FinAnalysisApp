@@ -7,6 +7,7 @@ class TestEndpoints(unittest.TestCase):
         app.app.config['TESTING'] = True
         app.app.config['WTF_CSRF_METHODS'] = []
         self.tester = app.app.test_client(self)
+        app.db.create_all()
 
     def test_home(self):
         
