@@ -19,7 +19,6 @@ class TestEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_login_reachable(self):
-        
         response = self.tester.get("/login")
         self.assertEqual(response.status_code, 200)
 
@@ -41,5 +40,3 @@ class TestEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.tester.get('/logout')
         self.assertEqual(response.status_code, 302)
-        app.User.query.filter(app.User.username == "testuser").delete()
-        app.db.session.commit()
