@@ -1,10 +1,9 @@
-from routes.get_ticker_info import TickerFetcher 
+from routes.get_ticker_info import TickerFetcher
 import unittest
 from unittest.mock import patch, PropertyMock, Mock
 import yfinance as yf
-import requests 
-import responses
 import pandas as pd
+
 
 class TestTickerInfo(unittest.TestCase):
     def setUp(self) -> None:
@@ -15,7 +14,7 @@ class TestTickerInfo(unittest.TestCase):
         "&includeAdjustedClose=true"
 
     def test_fetch_metrics(self):        
-        with patch.object(yf.Ticker, "info", 
+        with patch.object(yf.Ticker, "info",
                           new_callable=PropertyMock) as attr_mock:
             attr_mock.return_value = {'trailingEps': 1, 'trailingPE': 2}
 
@@ -35,7 +34,7 @@ class TestTickerInfo(unittest.TestCase):
                                   '0.238421', '163245600']],
                                 columns=['Date', 'Open', 'High', 'Low',
                                 'Close', 'Adj Close', 'Volume'])
-        
+
         expected.set_index('Date', inplace=True)
         expected = expected.astype({'Open': 'float64', 'High': 'float64',
                                     'Low': 'float64', 'Close': 'float64',
@@ -44,4 +43,3 @@ class TestTickerInfo(unittest.TestCase):
         expected.index = pd.to_datetime(expected.index)
         result = self.tickerFetcher.fetch_prices("TIKR")
         self.assertTrue(expected.equals(result))
-
