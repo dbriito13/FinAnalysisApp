@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 import io
-import yfinance as yf
 
 
 class TickerFetcher:
@@ -19,16 +18,6 @@ class TickerFetcher:
         r = requests.get(url, headers=headers)
         pds = pd.read_csv(io.StringIO(r.text), index_col=0, parse_dates=True)
         return pds
-
-    def fetch_metrics(self, ticker):
-        '''
-        Given a ticker calculates it's earnings per share from yfinance 
-        and P/E from this.
-        '''
-        eps_ttm = yf.Ticker(ticker).info['trailingEps']
-        pe_ratio = yf.Ticker(ticker).info['trailingPE']
-
-        return eps_ttm, pe_ratio
 
     def get_ticker_info(self, ticker):
         '''
@@ -54,4 +43,4 @@ class TickerFetcher:
         eps_ttm = "{:.4f}".format(eps_ttm)
         pe_ratio = "{:.4f}".format(pe_ratio)
 
-        return prev_close, daily_change, eps_ttm, pe_ratio, df
+        return prev_close, daily_change, "eps_ttm", "pe_ratio", df
