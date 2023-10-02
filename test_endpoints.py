@@ -24,19 +24,21 @@ class TestEndpoints(unittest.TestCase):
 
     def test_login(self):
         # Creating test user in database.db
-        app.User.query.filter(app.User.username == "testuser").delete()
-        user = app.User(username="testuser",
-                    password=app.bcrypt.generate_password_hash("testPassword1"),
-                    searches="")
-        app.db.session.add(user)
-        app.db.session.commit()
-        # Test login redirects
-        
-        response = self.tester.post("/login",
-                               data={
-                                   "username": "testuser",
-                                   "password": "testPassword1"
-                               })
-        self.assertEqual(response.status_code, 302)
-        response = self.tester.get('/logout')
-        self.assertEqual(response.status_code, 302)
+        try:
+            app.User.query.filter(app.User.username == "testuser").delete()
+        finally:
+            user = app.User(username="testuser",
+                        password=app.bcrypt.generate_password_hash("testPassword1"),
+                        searches="")
+            app.db.session.add(user)
+            app.db.session.commit()
+            # Test login redirects
+            
+            response = self.tester.post("/login",
+                                    data={
+                                        "username": "testuser",
+                                        "password": "testPassword1"
+                                    })
+            self.assertEqual(response.status_code, 302)
+            response = self.tester.get('/logout')
+            self.assertEqual(response.status_code, 302)
