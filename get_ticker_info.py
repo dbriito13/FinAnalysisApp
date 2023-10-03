@@ -35,9 +35,13 @@ class TickerFetcher:
                         df["Adj Close"].iloc[-2])
                         / df["Adj Close"].iloc[-2]) * 100.0
 
+        prev_vol = df["Volume"].iloc[-2]
+        daily_change_vol = ((df["Volume"].iloc[-1] -
+                        df["Volume"].iloc[-2])
+                        / df["Volume"].iloc[-2]) * 100.0
 
         # Limit number of decimal places to 4
         prev_close = "{:.4f}".format(prev_close)
         daily_change = "{:.4f}".format(daily_change)
 
-        return prev_close, daily_change, "eps_ttm", "pe_ratio", df
+        return prev_close, daily_change, prev_vol, daily_change_vol, df

@@ -126,7 +126,7 @@ def ticker():
     ticker = request.args.get('ticker')
     tickerFetcher = get_ticker_info.TickerFetcher(ticker)
     (prev_close, daily_chg,
-     eps, pe, prices) = tickerFetcher.get_ticker_info(ticker)
+     prev_vol, daily_chg_vol, prices) = tickerFetcher.get_ticker_info(ticker)
     tickerGraphs = ticker_graphs.TickerGraphs(prices, ticker)
     plot_prices, plot_vol = tickerGraphs.generate_plots()
     searches = []
@@ -138,10 +138,10 @@ def ticker():
                            ticker=ticker,
                            data=plot_prices,
                            aux=plot_vol,
-                           pe=pe,
+                           prev_vol=prev_vol,
                            prev_close=prev_close,
                            daily_chg=daily_chg,
-                           eps=eps,
+                           daily_chg_vol=daily_chg_vol,
                            searches=searches,
                            logged_in=logged_in)
 

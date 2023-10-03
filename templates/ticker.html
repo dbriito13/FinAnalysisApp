@@ -65,8 +65,13 @@
         {% endif %}
       </ul>
       <ul class="navbar-nav px-3">
+        {% if logged_in %}
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="/logout">Sign out</a>
+        </li>
+        {% endif %}
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="/login">Sign In</a>
         </li>
       </ul>
     </nav>
@@ -112,30 +117,30 @@
           <h2>Metrics</h2>
           <div class="table-responsive">
             <div class="list-group list-group-horizontal-md">
-              <a href="#" class="list-group-item list-group-item-action active">
+              <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">Last Closing Price</h5>
                 </div>
                 <p class="mb-1">{{ prev_close }}$</p>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">TTM Price to Earnings Ratio</h5>
-                </div>
-                <p class="mb-1">{{ pe }}</p>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">TTM Earnings per Share</h5>
-                </div>
-                <p class="mb-1">{{ eps }}</p>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
+              </div>
+              <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">Percentage change to previous price</h5>
                 </div>
                 <p class="mb-1">{{ daily_chg }}%</p>
-              </a>
+              </div>
+              <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Last Volume</h5>
+                </div>
+                <p class="mb-1">{{ prev_vol }}</p>
+              </div>
+              <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">Percentage change to previous volume</h5>
+                </div>
+                <p class="mb-1">{{ daily_chg_vol }}%</p>
+              </div>
             </div>
           </div>
         </main>
