@@ -91,7 +91,7 @@ def load_user(user_id):
 @click.command(name='create_tables')
 @with_appcontext
 def create_tables():
-    app.db.create_all()
+    db.create_all()
 
 
 app.cli.add_command(create_tables)
