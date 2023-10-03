@@ -35,12 +35,9 @@ class TickerFetcher:
                         df["Adj Close"].iloc[-2])
                         / df["Adj Close"].iloc[-2]) * 100.0
 
-        eps_ttm, pe_ratio = self.fetch_metrics(ticker)
 
         # Limit number of decimal places to 4
         prev_close = "{:.4f}".format(prev_close)
         daily_change = "{:.4f}".format(daily_change)
-        eps_ttm = "{:.4f}".format(eps_ttm)
-        pe_ratio = "{:.4f}".format(pe_ratio)
 
         return prev_close, daily_change, "eps_ttm", "pe_ratio", df
