@@ -105,9 +105,9 @@ health = HealthCheck()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    searches = db.Column(db.String(100), nullable=True)
+    username = db.Column(db.String(254), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    searches = db.Column(db.String(256), nullable=True)
 
 
 @app.route("/")
