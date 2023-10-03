@@ -25,9 +25,11 @@
       async function handleSearch() {
         var searches = {{ searches | tojson | safe }};
         console.log(searches)
-        var ticker = '{{ ticker }}'
+        var ticker = "{{ ticker }}"
+        console.log(ticker)
+        console.log(searches.includes(ticker))
         
-        if (ticker.length > 1 && !(ticker in searches)){
+        if (!(searches.includes(ticker))){
           console.log("Adding ticker ");
           await fetch("/save_search?ticker="+ticker)
                 .then((resp) => console.log(resp));
@@ -36,7 +38,7 @@
           popup.innerHTML = "Saved!"
           popup.classList.toggle("show");
         }
-        else if (ticker in searches){
+        else {
           console.log("Removing ticker");
           await fetch("/remove_search?ticker="+ticker)
                 .then((resp) => console.log(resp));
