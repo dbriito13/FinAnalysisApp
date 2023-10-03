@@ -183,7 +183,7 @@ def register():
     if form.validate_on_submit():
         # Create User model and upload to 
         user = User(username=request.form['username'],
-                               password=bcrypt.generate_password_hash(request.form['password']),
+                               password=bcrypt.generate_password_hash(request.form['password']).decode('utf8'),
                                searches="")
         db.session.add(user)
         db.session.commit()
