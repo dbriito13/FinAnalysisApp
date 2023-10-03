@@ -105,9 +105,9 @@ health = HealthCheck()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique=True)
-    password = db.Column(db.String, nullable=False)
-    searches = db.Column(db.String, nullable=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    searches = db.Column(db.String(100), nullable=True)
 
 
 @app.route("/")
@@ -154,14 +154,14 @@ def login():
     form = LoginForm(meta={'csrf': False})
     if form.validate_on_submit():
         # Find user with the specified 
-        user = User.query.filter(User.username == form.username.data) \
+        user = User.query.filter(User.username == request.form['username']) \
                          .first()
         if user is not None:
             if bcrypt.check_password_hash(user.password,
-                                          form.password.data):
+                                          request.form['password']):
                 flash('You were successfully logged in')
                 login_user(user)
-                session["username"] = form.username.data
+                session["username"] = request.form['username']
                 if user.searches != "" and user.searches is not None:
                     session["searches"] = user.searches.split(",")
                 else:
@@ -182,12 +182,15 @@ def register():
     form = RegisterForm(meta={'csrf': False})
     if form.validate_on_submit():
         # Create User model and upload to 
-        user = User(username=form.username.data,
-                               password=bcrypt.generate_password_hash(form.password.data),
+        user = User(username=request.form['username'],
+                               password=bcrypt.generate_password_hash(request.form['password']),
                                searches="")
         db.session.add(user)
         db.session.commit()
-        return redirect("/ticker?ticker=AAPL")
+        login_user(user)
+        session["searches"] = []
+        session["username"] = request.form['username']
+        return redirect("/login")
     else:
         if request.method == 'POST':
             flash('Something went wrong, check the input.')
@@ -198,7 +201,7 @@ def register():
 @login_required
 def profile():
     session.pop('_flashes', None)
-    if session["username"]:
+    if current_user.is_authenticated:
         user = User.query.filter(User.username == session["username"]) \
             .first()
         session["searches"] = user.searches.split(",")
