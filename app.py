@@ -14,6 +14,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 import re
+import click
+from flask.cli import with_appcontext
 
 
 class LoginForm(FlaskForm):
@@ -75,6 +77,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = SECRET_KEY
 app.app_context().push()
 
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -83,6 +86,15 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+@click.command(name='create_tables')
+@with_appcontext
+def create_tables():
+    app.db.create_all()
+
+
+app.cli.add_command(create_tables)
 
 
 db = SQLAlchemy()
