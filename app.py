@@ -105,9 +105,9 @@ health = HealthCheck()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    searches = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    searches = db.Column(db.String, nullable=True)
 
 
 @app.route("/")
@@ -187,7 +187,10 @@ def register():
                                password=bcrypt.generate_password_hash(form.password.data),
                                searches="")
         db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
         return redirect("/ticker?ticker=AAPL")
     else:
         if request.method == 'POST':
@@ -225,7 +228,10 @@ def save_search():
             user = User.query.filter(User.username == session["username"]) \
                              .first()
             user.searches = ",".join(session["searches"])
-            db.session.commit()
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
             print(session["searches"], flush=True, file=sys.stderr)
             return "OK"
     else:
@@ -243,7 +249,10 @@ def remove_search():
         user = User.query.filter(User.username == session["username"]) \
                    .first()
         user.searches = ",".join(session["searches"])
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
         return "OK"
     else:
         return "ERR"
@@ -257,7 +266,10 @@ def remove_all_searches():
     session.modified = True
     user = User.query.filter(User.username == session["username"]).first()
     user.searches = ""
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
     return redirect('/profile')
 
 
@@ -284,7 +296,10 @@ def login_reachable():
                 password=bcrypt.generate_password_hash("testPassword1"),
                 searches="")
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
     # Test login redirects
     tester = app.test_client()
     response_1 = tester.post("/login",
@@ -294,7 +309,10 @@ def login_reachable():
                              })
     response_2 = tester.get('/logout')
     User.query.filter(User.username == "testuser").delete()
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
     if response_1.status_code == 302 \
             and response_2.status_code == 302:
         return True, "Login Works"
