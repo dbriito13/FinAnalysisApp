@@ -149,7 +149,6 @@ def ticker():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        print("USUARIO AUTENTICADO \n\n\n", flush=True, file=sys.stderr)
         return redirect("/ticker?ticker=AAPL")
     session.pop('_flashes', None)
     form = LoginForm(meta={'csrf': False})
@@ -187,10 +186,7 @@ def register():
                                password=bcrypt.generate_password_hash(form.password.data),
                                searches="")
         db.session.add(user)
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
+        db.session.commit()
         return redirect("/ticker?ticker=AAPL")
     else:
         if request.method == 'POST':
@@ -228,10 +224,7 @@ def save_search():
             user = User.query.filter(User.username == session["username"]) \
                              .first()
             user.searches = ",".join(session["searches"])
-            try:
-                db.session.commit()
-            except:
-                db.session.rollback()
+            db.session.commit()
             print(session["searches"], flush=True, file=sys.stderr)
             return "OK"
     else:
@@ -249,10 +242,7 @@ def remove_search():
         user = User.query.filter(User.username == session["username"]) \
                    .first()
         user.searches = ",".join(session["searches"])
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
+        db.session.commit()
         return "OK"
     else:
         return "ERR"
@@ -266,10 +256,7 @@ def remove_all_searches():
     session.modified = True
     user = User.query.filter(User.username == session["username"]).first()
     user.searches = ""
-    try:
-        db.session.commit()
-    except:
-        db.session.rollback()
+    db.session.commit()
     return redirect('/profile')
 
 
@@ -296,10 +283,7 @@ def login_reachable():
                 password=bcrypt.generate_password_hash("testPassword1"),
                 searches="")
     db.session.add(user)
-    try:
-        db.session.commit()
-    except:
-        db.session.rollback()
+    db.session.commit()
     # Test login redirects
     tester = app.test_client()
     response_1 = tester.post("/login",
@@ -309,10 +293,7 @@ def login_reachable():
                              })
     response_2 = tester.get('/logout')
     User.query.filter(User.username == "testuser").delete()
-    try:
-        db.session.commit()
-    except:
-        db.session.rollback()
+    db.session.commit()
     if response_1.status_code == 302 \
             and response_2.status_code == 302:
         return True, "Login Works"
