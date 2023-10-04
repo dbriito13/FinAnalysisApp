@@ -113,12 +113,7 @@ class User(db.Model, UserMixin):
 @app.route("/")
 def main():
     # If logged in, then AAPL, if not then login
-    return '''
-     <form action="/ticker" method="GET">
-         <input name="ticker">
-         <input type="submit" value="Submit!">
-     </form>
-     '''
+    return redirect("/ticker?ticker=AAPL")
 
 
 @app.route("/ticker", methods=["GET"])
