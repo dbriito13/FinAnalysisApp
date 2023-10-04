@@ -125,9 +125,16 @@ def main():
 def ticker():
     ticker = request.args.get('ticker')
     tickerFetcher = get_ticker_info.TickerFetcher(ticker)
-    (prev_close, daily_chg,
-     prev_vol, daily_chg_vol, prices) = tickerFetcher.get_ticker_info(ticker)
-    tickerGraphs = ticker_graphs.TickerGraphs(prices, ticker)
+    try:
+        (prev_close, daily_chg,
+        prev_vol, daily_chg_vol, prices) = tickerFetcher.get_ticker_info(ticker)
+        tickerGraphs = ticker_graphs.TickerGraphs(prices, ticker)
+    except Exception:
+        if current_user.is_authenticated:
+            logged_in = True
+            return render_template('empty.html',
+                                   logged_in=logged_in,
+                                   ticker=ticker)
     plot_prices, plot_vol = tickerGraphs.generate_plots()
     searches = []
     logged_in = False

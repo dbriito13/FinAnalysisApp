@@ -16,6 +16,8 @@ class TickerFetcher:
         url += "?period1=1030060800&period2=1684368000&interval=1d&events="
         "history&includeAdjustedClose=true"
         r = requests.get(url, headers=headers)
+        if r.status_code != 200:
+            return None
         pds = pd.read_csv(io.StringIO(r.text), index_col=0, parse_dates=True)
         return pds
 
@@ -25,6 +27,8 @@ class TickerFetcher:
         3MT graph of volume and closing price, monthly rolling mean .
         '''
         df = self.fetch_prices(ticker)
+        if df is None:
+            raise Exception
 
         # Add monthly rolling mean for volume and closing prices
         df["rolling_price_1M"] = df["Adj Close"].rolling(30).mean()
