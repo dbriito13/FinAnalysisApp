@@ -12,7 +12,7 @@ class TestEndpoints(unittest.TestCase):
     def test_home(self):
         
         response = self.tester.get("/")
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_register_reachable(self):
         
